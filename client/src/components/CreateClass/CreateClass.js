@@ -288,7 +288,7 @@ class CreateClass extends Component {
                 </div>
                 <div className="col col-6">
                   <input className="form-check-input" type="radio" name={3} value="b" defaultChecked={this.props.equipment[3] === "b"} /> <label className="form-check-label">
-                  An Explorers's Pack
+                    An Explorers's Pack
                     <p className="small">Includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it.</p></label>
                 </div>
               </div>
@@ -414,23 +414,23 @@ class CreateClass extends Component {
     let selectBtn = (<button className="btn btn-block btn-secondary" disabled>Must Select All Equipments</button>)
 
     //I know I could write some of these if statements in one line, but it's easier for me to figure out how to handle this if I split it out.
-    if (this.props.class==="fighter") {
+    if (this.props.class === "fighter") {
       if (!(this.props.equipment.includes(""))) {
-        if(this.props.equipment[1].a) {
+        if (this.props.equipment[1].a) {
           if (!(this.props.equipment[1].a.includes(""))) {
             selectBtn = (<button className="btn btn-block btn-primary" onClick={() => this.props.handleSelectToggle("equipmentSelected")}>Choose This Equipment</button>)
           }
         }
 
-        else if(this.props.equipment[1].b) {
+        else if (this.props.equipment[1].b) {
           if (!(this.props.equipment[1].b.includes(""))) {
             selectBtn = (<button className="btn btn-block btn-primary" onClick={() => this.props.handleSelectToggle("equipmentSelected")}>Choose This Equipment</button>)
           }
         }
       }
-    } 
-    
-  
+    }
+
+
 
     return (<div>
       {selectedClassIcon}
@@ -492,8 +492,11 @@ class CreateClass extends Component {
       <div>
         <div className="row py-2">
           <div className="col col-12 col-md-3">
-            {this.renderLeftCol()}
-
+            <div className="card my-3">
+              <div className="card-body">
+                {this.renderLeftCol()}
+              </div>
+            </div>
           </div>
           <div className="col col-12 col-md-9">
             {this.basicClassInfo()}

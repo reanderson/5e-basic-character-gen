@@ -55,9 +55,9 @@ class CreateRace extends Component {
     const selectedRaceIcon = (<div className="row justify-content-center">
       <div className="col col-12 col-md-6">
         <Icon src={raceIcons[this.props.activeRace]} name={this.props.activeRace.toLowerCase()
-        .split(' ')
-        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-        .join(' ')} nameLower={this.props.activeRace} />
+          .split(' ')
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(' ')} nameLower={this.props.activeRace} />
       </div>
     </div>)
 
@@ -187,9 +187,11 @@ class CreateRace extends Component {
       <div>
         <div className="row py-2">
           <div className="col col-12 col-md-3">
-
-            {this.renderLeftCol()}
-
+            <div className="card my-3">
+              <div className="card-body">
+                {this.renderLeftCol()}
+              </div>
+            </div>
           </div>
           <div className="col col-12 col-md-9">
             {this.basicRaceInfo(this.props.activeRace)}

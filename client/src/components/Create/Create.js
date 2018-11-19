@@ -4,6 +4,7 @@ import Race from "../CreateRace"
 import Class from "../CreateClass"
 import Background from "../CreateBackground"
 import Details from "../CreateDetails"
+import Stats from "../CreateStats"
 
 class Create extends Component {
   state = {
@@ -25,7 +26,8 @@ class Create extends Component {
     equipment: [],
     equipmentSelected: false,
     // Ability Score States
-    method: "standard",
+    method: "",
+    methodSelected: false,
     values: [15, 14, 13, 12, 10, 8],
     valuesSelected: false,
     valuesRemaining: [15, 14, 13, 12, 10, 8],
@@ -104,6 +106,48 @@ class Create extends Component {
       [event.target.name]: event.target.value
     })
   }
+
+  handleBgDetailChange = (event) => {
+    const characteristicChange = {...this.state.characteristics}
+    if(!isNaN(parseInt(event.target.name, 10))) {
+      characteristicChange.personalityTraits[parseInt(event.target.name, 10)] = event.target.value
+    } else {
+      characteristicChange[event.target.name] = event.target.value
+    }
+
+    this.setState({
+      characteristics: characteristicChange
+    })
+  }
+
+  // Updates for Stats tab
+  handleMethodSelect = (event) => {
+    if (event.target.name === "standard") {
+      this.setState({
+        method: "standard",
+        methodSelected: "true",
+        values: [15, 14, 13, 12, 10, 8],
+        valuesSelected: true,
+        //Star the remaining values at 1 in order to make sure that it's always reading the index as a number that exists, as opposed to 0
+        valuesRemaining: [1, 2, 3, 4, 5, 6]
+      })
+    }
+  }
+
+  setStat = (stat, value) => {
+    const updateStats = {...this.state.stats}
+    updateStats[stat] = value
+    this.setState({
+      stats: updateStats
+    })
+  }
+
+  setRemainingValues = (values) => {
+    this.setState({
+      valuesRemaining: values
+    })
+  }
+  
 
   // Three Methods for various means of changing the equipment values, depending on if we just need a string, an object, or something within that object.
   // This is a disaster, but it works. Somehow.
@@ -262,7 +306,27 @@ class Create extends Component {
         personality={this.state.personality}
         backstory={this.state.backstory}
         characteristics={this.state.characteristics}
-        handleFormChange={this.handleFormChange}/>)
+        handleFormChange={this.handleFormChange}
+        handleBgDetailChange={this.handleBgDetailChange}/>)
+    } else if (this.state.activeTab==="stats") {
+      return (<Stats 
+        method={this.state.method}
+        methodSelected={this.state.methodSelected}
+        values={this.state.values}
+        valuesSelected={this.state.valuesSelected}
+        valuesRemaining={this.state.valuesRemaining}
+        stats={this.state.stats}
+        statsSelected={this.state.statsSelected}
+        race={this.state.race}
+        raceSelected={this.state.raceSelected}
+        raceOptions={this.state.raceOptions}
+        raceOptionsSelected={this.state.raceOptionsSelected}
+        class={this.state.class}
+        classSelected={this.state.classSelected}
+        handleMethodSelect={this.handleMethodSelect}
+        handleSelectToggle={this.handleSelectToggle}
+        setStat={this.setStat}
+        setRemainingValues={this.setRemainingValues}/>)
     }
   }
 

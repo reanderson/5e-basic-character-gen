@@ -21,7 +21,7 @@ class CreateBackground extends Component {
       return this.bgDetails()
     } else if (!this.props.bgOptionsSelected) {
       return this.rightColOptionsSelect()
-    } 
+    }
   }
 
   // Left Col Functions
@@ -81,13 +81,13 @@ class CreateBackground extends Component {
       </div>
     </div>)
 
-return (<div>
-  {selectedBgIcon}
+    return (<div>
+      {selectedBgIcon}
 
-  
-  <hr />
-  <button className="btn btn-primary btn-block my-3" onClick={() => this.props.handleSelectToggle("bgOptionsSelected")}><i className="fas fa-caret-up"></i> Change Background Options</button>
-</div>)
+
+      <hr />
+      <button className="btn btn-primary btn-block my-3" onClick={() => this.props.handleSelectToggle("bgOptionsSelected")}><i className="fas fa-caret-up"></i> Change Background Options</button>
+    </div>)
   }
 
 
@@ -174,8 +174,11 @@ return (<div>
       <div>
         <div className="row py-2">
           <div className="col col-12 col-md-3">
-            {this.renderLeftCol()}
-
+            <div className="card my-3">
+              <div className="card-body">
+                {this.renderLeftCol()}
+              </div>
+            </div>
           </div>
           <div className="col col-12 col-md-9">
             {this.basicBgInfo()}

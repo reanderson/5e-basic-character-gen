@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import StatRow from "../StatRow"
 
 class CreateStats extends Component {
   state = {
@@ -31,15 +32,15 @@ class CreateStats extends Component {
 
   setScore = (stat) => {
     // get the value out of props.values
-    const val = this.props.values[this.state.activeValue-1]
+    const val = this.props.values[this.state.activeValue - 1]
     // copy the remaining values array, so we can edit it to set state later
     const remainingValsCopy = [...this.props.valuesRemaining]
 
     // find the index of the active value in this array, and remove it
     const indexToRemove = remainingValsCopy.findIndex(value => value === (this.state.activeValue));
-    
+
     remainingValsCopy.splice(indexToRemove, 1)
-    
+
     // update the remaining values
     this.props.setRemainingValues(remainingValsCopy)
 
@@ -63,7 +64,7 @@ class CreateStats extends Component {
     const valIndex = this.props.values.findIndex(value => value === (val))
 
     // push valIndex to the remaining values
-    remainingValsCopy.push(valIndex+1)
+    remainingValsCopy.push(valIndex + 1)
 
     // update the remaining values
     this.props.setRemainingValues(remainingValsCopy)
@@ -83,14 +84,14 @@ class CreateStats extends Component {
     const valIndex = this.props.values.findIndex(value => value === (val))
 
     // push valIndex to the remaining values
-    remainingValsCopy.push(valIndex+1)
+    remainingValsCopy.push(valIndex + 1)
 
     // get the intended new value for the stat
-    const newVal = this.props.values[this.state.activeValue-1]
+    const newVal = this.props.values[this.state.activeValue - 1]
 
     // find the index of the active value in this array, and remove it
     const indexToRemove = remainingValsCopy.findIndex(value => value === (this.state.activeValue));
-    
+
     remainingValsCopy.splice(indexToRemove, 1)
 
     // update the remaining values
@@ -107,13 +108,13 @@ class CreateStats extends Component {
 
   statSetBtn = (stat) => {
     if ((this.state.activeValue && this.props.stats[stat])) {
-      return(<button className="btn btn-sm btn-dark" onClick={() => this.replaceScore(stat)}>Replace {stat.toUpperCase()}: {this.props.stats[stat]}</button>)
+      return (<button className="btn btn-sm btn-dark" onClick={() => this.replaceScore(stat)}>Replace {stat.toUpperCase()}: {this.props.stats[stat]}</button>)
     } else if (this.state.activeValue) {
-      return(<button className="btn btn-sm btn-dark" onClick={() => this.setScore(stat)}>Assign to {stat.toUpperCase()}</button>)
+      return (<button className="btn btn-sm btn-dark" onClick={() => this.setScore(stat)}>Assign to {stat.toUpperCase()}</button>)
     } else if (this.props.stats[stat]) {
-      return(<button className="btn btn-sm btn-outline-dark" onClick={() => this.removeScore(stat, null)}>{this.props.stats[stat]}</button>)
+      return (<button className="btn btn-sm btn-outline-dark" onClick={() => this.removeScore(stat, null)}>{this.props.stats[stat]}</button>)
     } else {
-      return(<button className="btn btn-sm btn-outline-dark" disabled>Choose a Value</button>)
+      return (<button className="btn btn-sm btn-outline-dark" disabled>Choose a Value</button>)
     }
   }
 
@@ -145,6 +146,8 @@ class CreateStats extends Component {
       return (<div>If you're seeing this, something is wrong.</div>)
     } else if (!this.props.statsSelected) {
       return (this.leftStatDistribute())
+    } else {
+      return (this.leftStatsChosen())
     }
   }
 
@@ -156,6 +159,8 @@ class CreateStats extends Component {
       return (<div>If you're seeing this, something is wrong.</div>)
     } else if (!this.props.statsSelected) {
       return (this.midStatDistribute())
+    } else {
+      return (this.midStatsChosen())
     }
   }
 
@@ -173,9 +178,35 @@ class CreateStats extends Component {
       backBtn = (<button className="btn btn-primary btn-block my-3" onClick={() => this.undoStandardSelect()}><i className="fas fa-caret-up"></i> Change Stat Method</button>)
     }
 
+    // Assume that all of the stat values have been allocated
+    let allSet = true
+    for (let stat in this.props.stats) {
+      if (this.props.stats[stat] === null) {
+        //if a stat is found to be null, set to false
+        allSet = false
+      }
+    }
+
+    let nextBtn
+    if (allSet) {
+      nextBtn = (<button className="btn btn-primary btn-block" onClick={() => this.props.handleSelectToggle("statsSelected")}>Use These Stats</button>)
+    } else {
+      nextBtn = (<button className="btn btn-secondary btn-block" disabled>Please Set All Stats</button>)
+    }
+
     return (<div>
       <p className="card-text and text-capitalize">Method: {this.props.method}</p>
       {backBtn}
+      <hr />
+      {nextBtn}
+    </div>)
+  }
+
+  leftStatsChosen = () => {
+    return (<div>
+      <p className="card-text and text-capitalize">Method: {this.props.method}</p>
+      <hr />
+      <button className="btn btn-primary btn-block" onClick={() => this.props.handleSelectToggle("statsSelected")}><i className="fas fa-caret-up"></i> Change Stat Allocation</button>
     </div>)
   }
 
@@ -195,12 +226,12 @@ class CreateStats extends Component {
     return (<div className="text-center">
       <div className="btn-group btn-group-lg mb-3" role="group">
         {this.props.values.map((value, i) => {
-          if (this.props.valuesRemaining.includes(i+1)) {
+          if (this.props.valuesRemaining.includes(i + 1)) {
             return (
               <button
-                key={i+1}
-                name={i+1}
-                className={`btn ${this.state.activeValue === i+1 ? "btn-primary" : "btn-secondary"}`}
+                key={i + 1}
+                name={i + 1}
+                className={`btn ${this.state.activeValue === i + 1 ? "btn-primary" : "btn-secondary"}`}
                 onClick={this.selectValue}
                 value={value}>
                 {value}
@@ -211,7 +242,7 @@ class CreateStats extends Component {
           }
         })}
       </div>
-  <br/>
+      <br />
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -223,48 +254,90 @@ class CreateStats extends Component {
           </tr>
         </thead>
         <tbody>
+          <StatRow
+            stat="str"
+            base={this.props.stats.str}
+            btn={this.statSetBtn("str")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="dex"
+            base={this.props.stats.dex}
+            btn={this.statSetBtn("dex")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="con"
+            base={this.props.stats.con}
+            btn={this.statSetBtn("con")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="int"
+            base={this.props.stats.int}
+            btn={this.statSetBtn("int")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="wis"
+            base={this.props.stats.wis}
+            btn={this.statSetBtn("wis")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="cha"
+            base={this.props.stats.cha}
+            btn={this.statSetBtn("cha")}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+        </tbody>
+      </table>
+    </div>)
+  }
+
+  midStatsChosen = () => {
+    return (<div className="text-center">
+      <table className="table table-bordered">
+        <thead>
           <tr>
-            <th scope="row">STR</th>
-            <td>{this.statSetBtn("str")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].str : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.str) ? (this.raceBonus[this.props.race].str + this.props.stats.str) : "---"}</td>
-            <td></td>
+            <th scope="col">Stat</th>
+            <th scope="col">Base Score</th>
+            <th scope="col">Racial Bonus</th>
+            <th scope="col">Total</th>
+            <th scope="col">Modifier</th>
           </tr>
-          <tr>
-            <th scope="row">DEX</th>
-            <td>{this.statSetBtn("dex")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].dex : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.dex) ? (this.raceBonus[this.props.race].dex + this.props.stats.dex) : "---"}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">CON</th>
-            <td>{this.statSetBtn("con")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].con : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.con) ? (this.raceBonus[this.props.race].con + this.props.stats.con) : "---"}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">INT</th>
-            <td>{this.statSetBtn("int")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].int : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.int) ? (this.raceBonus[this.props.race].int + this.props.stats.int) : "---"}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">WIS</th>
-            <td>{this.statSetBtn("wis")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].wis : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.wis) ? (this.raceBonus[this.props.race].wis + this.props.stats.wis) : "---"}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">CHA</th>
-            <td>{this.statSetBtn("cha")}</td>
-            <td>{this.props.raceSelected ? this.raceBonus[this.props.race].cha : "N/A"}</td>
-            <td>{(this.props.raceSelected && this.props.stats.cha) ? (this.raceBonus[this.props.race].cha + this.props.stats.cha) : "---"}</td>
-            <td></td>
-          </tr>
+        </thead>
+        <tbody>
+          <StatRow
+            stat="str"
+            base={this.props.stats.str}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="dex"
+            base={this.props.stats.dex}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="con"
+            base={this.props.stats.con}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="int"
+            base={this.props.stats.int}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="wis"
+            base={this.props.stats.wis}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
+          <StatRow
+            stat="cha"
+            base={this.props.stats.cha}
+            raceSelected={this.props.raceSelected}
+            raceBonus={this.raceBonus[this.props.race]} />
         </tbody>
       </table>
     </div>)

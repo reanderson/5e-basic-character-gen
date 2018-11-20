@@ -5,6 +5,7 @@ import Class from "../CreateClass"
 import Background from "../CreateBackground"
 import Details from "../CreateDetails"
 import Stats from "../CreateStats"
+import Save from "../CreateSave"
 
 class Create extends Component {
   state = {
@@ -327,6 +328,25 @@ class Create extends Component {
         handleSelectToggle={this.handleSelectToggle}
         setStat={this.setStat}
         setRemainingValues={this.setRemainingValues}/>)
+    } else if (this.state.activeTab==="save") {
+      return (<Save 
+        raceSelected = {this.state.raceSelected}
+        raceOptionsSelected = {this.state.raceOptionsSelected}
+        classSelected = {this.state.classSelected}
+        skillsSelected = {this.state.skillsSelected}
+        featuresSelected = {this.state.featuresSelected}
+        equipmentSelected = {this.state.equipmentSelected}
+        backgroundSelected = {this.state.backgroundSelected}
+        bgOptionsSelected = {this.state.bgOptionsSelected}
+        methodSelected = {this.state.methodSelected}
+        valuesSelected = {this.state.valuesSelected}
+        statsSelected = {this.state.statsSelected}
+        name = {this.state.name}
+        alignment = {this.state.alignment}
+        gender = {this.state.gender}
+        age = {this.state.age}
+        public = {this.state.public}
+        handleSelectToggle = {this.handleSelectToggle}/>)
     }
   }
 

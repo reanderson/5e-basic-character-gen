@@ -75,14 +75,14 @@ class CreateSave extends Component {
         <hr />
 
         <div className="form-check">
-          <input className="form-check-input" type="checkbox" value={this.props.public} onChange={() => this.props.handleSelectToggle("public")} />
+          <input className="form-check-input" type="checkbox" name="public" value={this.props.public} onChange={() => this.props.handleSelectToggle("public")} />
           <label className="form-check-label">
             Make Character Public?</label>
         </div>
         {(this.checkAllFlags() ? (<div><span className="text-danger font-weight-bold">NOTE:</span> Once a character is submitted, you will only be able to edit the Details page. Please make sure you're happy with all of your other options before submitting.</div>) : (<div></div>))}
         <div className="text-right">
           {(this.checkAllFlags() ?
-            (<button className="btn btn-primary" onClick={() => (console.log("This will submit your character, eventually"))}>SUBMIT</button>) :
+            (<button className="btn btn-primary" onClick={() => this.props.saveChar()}>SUBMIT</button>) :
             (<button className="btn btn-secondary" disabled>Please Fill Out All Required Options</button>))}
 
 

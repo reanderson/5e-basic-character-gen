@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import CreateTabs from "../CreateTabs";
 import Race from "../CreateRace"
 import Class from "../CreateClass"
@@ -6,6 +7,8 @@ import Background from "../CreateBackground"
 import Details from "../CreateDetails"
 import Stats from "../CreateStats"
 import Save from "../CreateSave"
+
+import API from "../../utils/API";
 
 class Create extends Component {
   state = {
@@ -43,7 +46,7 @@ class Create extends Component {
     statsSelected: false,
     // Background States
     background: "soldier",
-    backgroundSkills: ["Athletics", "Intimidation"],
+    backgroundSkills: ["athletics", "intimidation"],
     backgroundSelected: false,
     bgOptions: {},
     bgOptionsSelected: false,
@@ -59,7 +62,51 @@ class Create extends Component {
     characteristics: {}, // These are chosen on the Details tab, but are tied to BG
     
     // Save-related States
-    public: false
+    public: false,
+
+    redirect: false,
+    redirectId: ""
+  }
+
+  //prepares an object for saving
+  prepareCharGen = () => {
+    // copy the state
+    const stateCopy = {...this.state}
+
+    // we don't need any of these keys from the state
+    const unneeded = ["activeTab", "raceSelected", "raceOptionsSelected", "classSelected", "skillsSelected", "featuresSelected", "equipmentSelected", "method", "methodSelected", "values", "valuesSelected", "valuesRemaining", "statsSelected", "backgroundSelected", "bgOptionsSelected", "redirect", "redirectId"]
+
+    // so we can remove them
+    unneeded.forEach(item => {
+      delete stateCopy[item]
+    })
+
+    return stateCopy
+  }
+
+  saveChar = () => {
+    const charInfo = this.prepareCharGen();
+
+    API
+    .makeChar(charInfo)
+    .then(res => {
+      console.log(res.data);
+      this.setRedirect(res.data._id)
+    })
+    .catch(err => console.log(err.response));
+  }
+
+  setRedirect = (id) => {
+    this.setState({
+      redirect: true,
+      redirectId: id
+    })
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to={`/character/${this.state.redirectId}`} />
+    }
   }
 
   //Changes the active tab when you click on a new tab
@@ -199,7 +246,7 @@ class Create extends Component {
       this.setState({
         classSkills: ["", ""],
         features: {
-          fightingStyle: ""
+          fighting_style: ""
         },
         equipment: ["", {}, "", ""]
       })
@@ -220,7 +267,7 @@ class Create extends Component {
           gameProf: "",
           gameSet: ""
         },
-        backgroundSkills: ["Athletics", "Intimidation"],
+        backgroundSkills: ["athletics", "intimidation"],
         characteristics: {
           personalityTraits: ["", ""],
           ideal: "",
@@ -346,17 +393,19 @@ class Create extends Component {
         gender = {this.state.gender}
         age = {this.state.age}
         public = {this.state.public}
-        handleSelectToggle = {this.handleSelectToggle}/>)
+        handleSelectToggle = {this.handleSelectToggle}
+        saveChar = {this.saveChar}/>)
     }
   }
 
-  componentDidMount() {
-    console.log(this.props)
-  }
-
   render() {
+    if (!this.props.user) {
+      return <Redirect to="/" />
+    }
+
     return (
       <div className="m-5">
+      {this.renderRedirect()}
         <CreateTabs path={this.props.match.path} active={this.state.activeTab} change={this.handleTabChange} />
 
         {this.renderTab()}

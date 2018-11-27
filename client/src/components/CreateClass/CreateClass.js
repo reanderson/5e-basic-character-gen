@@ -4,7 +4,7 @@ import Icon from "../ItemIcon"
 import WeaponSelect from "../WeaponSelect"
 
 const skillOptions = {
-  fighter: ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]
+  fighter: ["acrobatics", "animal handling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
 }
 
 class CreateClass extends Component {
@@ -99,9 +99,8 @@ class CreateClass extends Component {
           {this.props.classSkills.map((val, i) => {
             return (
               <div className="col col-12 col-md-6 my-2" key={`div-${i}`}>
-                <select className="form-control"
+                <select className="form-control text-capitalize"
                   value={val}
-                  // onChange={}
                   key={i}
                   name={i}
                   placeholder="Select a Skill"
@@ -131,7 +130,7 @@ class CreateClass extends Component {
           {this.props.classSkills.map((val, i) => {
             return (
               <div className="col col-12 col-md-6 my-2" key={`div-${i}`}>
-                <select className="form-control"
+                <select className="form-control text-capitalize"
                   value={val}
                   // onChange={}
                   key={i}
@@ -166,27 +165,27 @@ class CreateClass extends Component {
         <div className="form-check" onChange={this.props.handleFeatureChange}>
           <div className="row">
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="archery" defaultChecked={this.props.features.fightingStyle === "archery"} /> <label className="form-check-label"><span className="font-weight-bold">ARCHERY</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="archery" defaultChecked={this.props.features.fighting_style === "archery"} /> <label className="form-check-label"><span className="font-weight-bold">ARCHERY</span><br />
                 You gain a +2 bonus to attack rolls you make with ranged weapons.</label>
             </div>
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="defense" defaultChecked={this.props.features.fightingStyle === "defense"} /> <label className="form-check-label"><span className="font-weight-bold">DEFENSE</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="defense" defaultChecked={this.props.features.fighting_style === "defense"} /> <label className="form-check-label"><span className="font-weight-bold">DEFENSE</span><br />
                 While you are wearing armor, you gain a +1 bonus to AC.</label>
             </div>
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="dueling" defaultChecked={this.props.features.fightingStyle === "dueling"} /> <label className="form-check-label"><span className="font-weight-bold">DUELING</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="dueling" defaultChecked={this.props.features.fighting_style === "dueling"} /> <label className="form-check-label"><span className="font-weight-bold">DUELING</span><br />
                 When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.</label>
             </div>
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="great weapon fighting" defaultChecked={this.props.features.fightingStyle === "great weapon fighting"} /> <label className="form-check-label"><span className="font-weight-bold">GREAT WEAPON FIGHTING</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="great weapon fighting" defaultChecked={this.props.features.fighting_style === "great weapon fighting"} /> <label className="form-check-label"><span className="font-weight-bold">GREAT WEAPON FIGHTING</span><br />
                 When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.</label>
             </div>
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="protection" defaultChecked={this.props.features.fightingStyle === "protection"} /> <label className="form-check-label"><span className="font-weight-bold">PROTECTION</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="protection" defaultChecked={this.props.features.fighting_style === "protection"} /> <label className="form-check-label"><span className="font-weight-bold">PROTECTION</span><br />
                 When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.</label>
             </div>
             <div className="col col-6 col-md-4">
-              <input className="form-check-input" type="radio" name="fightingStyle" value="two-weapon fighting" defaultChecked={this.props.features.fightingStyle === "two-weapon fighting"} /> <label className="form-check-label"><span className="font-weight-bold">TWO-WEAPON FIGHTING</span><br />
+              <input className="form-check-input" type="radio" name="fighting_style" value="two-weapon fighting" defaultChecked={this.props.features.fighting_style === "two-weapon fighting"} /> <label className="form-check-label"><span className="font-weight-bold">TWO-WEAPON FIGHTING</span><br />
                 When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.</label>
             </div>
           </div>
@@ -358,14 +357,14 @@ class CreateClass extends Component {
 
     const skillChoices = (<ul>
       {this.props.classSkills.map((skill) => (
-        <li key={skill}>{skill}</li>
+        <li className="text-capitalize" key={skill}>{skill}</li>
       ))}
     </ul>)
 
     let selectBtn
 
     if (this.props.class === "fighter") {
-      if (this.props.features.fightingStyle === "") {
+      if (this.props.features.fighting_style === "") {
         selectBtn = (<button className="btn btn-block btn-secondary" disabled>Must Select a Fighting Style</button>)
       }
       else {
@@ -397,7 +396,7 @@ class CreateClass extends Component {
 
     const skillChoices = (<ul>
       {this.props.classSkills.map((skill) => (
-        <li key={skill}>{skill}</li>
+        <li className="text-capitalize" key={skill}>{skill}</li>
       ))}
     </ul>)
 
@@ -405,7 +404,7 @@ class CreateClass extends Component {
 
     let featureList = (
       <div>
-        {featureKeys.map(key => (<span className="text-capitalize" key={`${key}-outer`}> <span className="font-weight-bold" key={`${key}-inner`}>{key}: </span>
+        {featureKeys.map(key => (<span className="text-capitalize" key={`${key}-outer`}> <span className="font-weight-bold" key={`${key}-inner`}>{key.split("_").join(" ")}: </span>
           {this.props.features[key]}
         </span>))}
       </div>
